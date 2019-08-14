@@ -1,4 +1,6 @@
+
 <?php
+//PruebaGit Release
 session_start();
 $logged = $_SESSION['logged'];
 
