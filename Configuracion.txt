@@ -1,0 +1,39 @@
+Puertos que abrimos y creamos para el servidor
+SSH 22
+FTP 21
+HTTP 80
+HTTPS 443
+VESTA 8083
+
+Comandos utilizados para instalar VESTA
+
+
+    # Connect to your server as root via SSH ssh root@your.server
+    # Download installation script curl -O http://vestacp.com/pub/vst-install.sh
+    # Run it bash vst-install.sh --nginx yes --apache yes --phpfpm no --named yes --remi yes --vsftpd yes --proftpd no --iptables yes --fail2ban yes --quota no --exim yes --dovecot yes --spamassassin yes --clamav yes --softaculous yes --mysql yes --postgresql no --hostname 8ardom.ga --email crls8aslns@outlook.com --password Ch4rl138a! -f
+
+    https://35.166.61.92:8083
+   username: admin
+   password: Ch4rl138a!
+======
+3 para darle ssl al panel
+======
+
+ln -s /home/user/conf/web/ssl.crt /usr/local/vesta/ssl/certificate.crt
+ln -s /home/user/conf/web/ssl.key /usr/local/vesta/ssl/certificate.key
+
+====
+4
+====
+
+
+Puertos a abrr tanto en firewall de vesta como en aws
+1883, 8883,8093,8094,8090,18083
+
+
+wget https://www.emqx.io/downloads/broker/v3.0.0/emqx-ubuntu18.04-v3.0.0.zip
+
+
+
+ln -s /home/admin/conf/web/ssl.8ardom.ga.crt /emqx/etc/certs/cert.pem
+ln -s /home/admin/conf/web/ssl.8ardom.ga.key /emqx/etc/certs/key.pem
