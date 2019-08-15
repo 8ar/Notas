@@ -1,4 +1,3 @@
-
 <?php
 //PruebaGit Release
 session_start();
@@ -13,31 +12,37 @@ define("DB_HOST", "localhost");
  define("DB_PASSWORD", "zqZLcM3LiZ");
  define("DB_DATABASE", "admin_C_DRub");
 
-$alias="";
+$model="";
 $serie="";
+$room="";
 $user_id = $_SESSION['user_id'];
 
 //momento de conectarnos a db
 $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
 
 if ($conn==false){
-  echo "Hubo un problema al conectarse a María DB";
+  echo "Hubo un problema al conectarse a la BD";
   die();
 }
 
 if( isset($_POST['id_to_delete']) && $_POST['id_to_delete']!="") {
   $id_to_delete = $_POST['id_to_delete'];
-  $conn->query("DELETE FROM `admin_cursoiot`.`devices` WHERE  `devices_id`=$id_to_delete");
+  $conn->query("DELETE FROM `admin_C_DRub`.`devices` WHERE  `devices_id`='".$id_to_delete."'");
 }
 
-if( isset($_POST['serie']) && isset($_POST['alias'])) {
+if( isset($_POST['serie']) && isset($_POST['mc_num']) && isset($_POST['room']) && isset($_POST['room']) ) {
 
-  $alias = strip_tags($_POST['alias']);
+  $mc_num = strip_tags($_POST['mc_num']);
   $serie = strip_tags($_POST['serie']);
-  $conn->query("INSERT INTO `devices` (`devices_alias`, `devices_serie`, `devices_user_id`) VALUES ('".$alias."', '".$serie."', '".$user_id."');");
+  $name=strip_tags($_POST['name']);
+  $id= $mc_num."-".$serie;
+  $room = strip_tags($_POST['room']);
+  $conn->query("INSERT INTO `devices` (`devices_name`, `devices_id`, `devices_user_id`,`devices_room`) VALUES ('".$name."', '".$id."', '".$user_id."','".$room."');");
 
-}
+  }
 
+$result = $conn->query("SELECT * FROM `module_catalog`");
+$models = $result->fetch_all(MYSQLI_ASSOC);
 $result = $conn->query("SELECT * FROM `devices` WHERE `devices_user_id` = '".$user_id."'");
 $devices = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -225,7 +230,7 @@ $devices = $result->fetch_all(MYSQLI_ASSOC);
                 <div class="box-header">
 
                   <h2>Agregar Dispositivo</h2>
-                  <small>Ingresa el nombre (alias) y el número de serie del dispositivo que quieres instalar.</small>
+                  <small>Ingresa los siguientes datos para poder registrar tu modulo.</small>
 
                 </div>
                 <div class="box-divider m-0"></div>
@@ -234,9 +239,28 @@ $devices = $result->fetch_all(MYSQLI_ASSOC);
 
                   <form role="form" method="post" target="">
                     <div class="form-group">
-                      <label for="exampleInputEmail1">Alias</label>
-                      <input name="alias" type="text" class="form-control" placeholder="Ej: Casa Campo">
+                      <label for="exampleInputEmail1">Cuarto</label>
+                      <input name="room" type="text" class="form-control" placeholder="Ej: Cuarto José">
                     </div>
+
+                    <form role="form" method="post" target="">
+                      <div class="form-group">
+                        <label for="exampleInputEmail1">Nombre</label>
+                        <input name="name" type="text" class="form-control" placeholder="Ej: Aire condiciona LG">
+                      </div>
+
+
+
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Modelo</label>
+                      <select  name="mc_num" class="form-control select2" ui-jp="select2" ui-options="{theme: 'bootstrap'}">
+                        <?php foreach ($models as $model ) { ?>
+                          <option value="<?php echo $model['mc_num']?>"><?php echo $model['mc_num']." ".$model['mc_name'] ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+
+
                     <div class="form-group">
                       <label for="exampleInputPassword1">Serie</label>
                       <input name="serie" type="texzt" class="form-control" placeholder="Ej: 777222">
@@ -262,17 +286,19 @@ $devices = $result->fetch_all(MYSQLI_ASSOC);
                 <table class="table table-striped b-t">
                   <thead>
                     <tr>
-                      <th>Alias</th>
-                      <th>Fecha</th>
-                      <th>Serie</th>
+                      <th>Cuarto</th>
+                      <th>Nombre</th>
+                      <th>Id</th>
+                      <th>Día</th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php foreach ($devices as $device) {?>
                       <tr>
-                        <td><?php echo $device['devices_alias'] ?></td>
+                        <td><?php echo $device['devices_room'] ?></td>
+                        <td><?php echo $device['devices_name'] ?></td>
+                        <td><?php echo $device['devices_id'] ?></td>
                         <td><?php echo $device['devices_date'] ?></td>
-                        <td><?php echo $device['devices_serie'] ?></td>
                       </tr>
                     <?php } ?>
                   </tbody>
@@ -288,7 +314,7 @@ $devices = $result->fetch_all(MYSQLI_ASSOC);
               <div class="form-group">
                 <select  name="id_to_delete" class="form-control select2" ui-jp="select2" ui-options="{theme: 'bootstrap'}">
                   <?php foreach ($devices as $device ) { ?>
-                    <option value="<?php echo  $device['devices_id']?>"><?php echo $device['devices_alias']."<-->".$device['devices_serie'] ?></option>
+                    <option value="<?php echo  $device['devices_id']?>"><?php echo $device['devices_id']." ".$device['devices_name'] ?></option>
                   <?php } ?>
                 </select>
               </div>
@@ -456,24 +482,24 @@ class="p-a col-sm-6 lter">
 <script src="libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js"></script>
 <script src="libs/jquery/PACE/pace.min.js"></script>
 
-<script src="html/scripts/config.lazyload.js"></script>
+<script src="assets/scripts/config.lazyload.js"></script>
 
-<script src="html/scripts/palette.js"></script>
-<script src="html/scripts/ui-load.js"></script>
-<script src="html/scripts/ui-jp.js"></script>
-<script src="html/scripts/ui-include.js"></script>
-<script src="html/scripts/ui-device.js"></script>
-<script src="html/scripts/ui-form.js"></script>
-<script src="html/scripts/ui-nav.js"></script>
-<script src="html/scripts/ui-screenfull.js"></script>
-<script src="html/scripts/ui-scroll-to.js"></script>
-<script src="html/scripts/ui-toggle-class.js"></script>
+<script src="assets/scripts/palette.js"></script>
+<script src="assets/scripts/ui-load.js"></script>
+<script src="assets/scripts/ui-jp.js"></script>
+<script src="assets/scripts/ui-include.js"></script>
+<script src="assets/scripts/ui-device.js"></script>
+<script src="assets/scripts/ui-form.js"></script>
+<script src="assets/scripts/ui-nav.js"></script>
+<script src="assets/scripts/ui-screenfull.js"></script>
+<script src="assets/scripts/ui-scroll-to.js"></script>
+<script src="assets/scripts/ui-toggle-class.js"></script>
 
-<script src="html/scripts/app.js"></script>
+<script src="assets/scripts/app.js"></script>
 
 <!-- ajax -->
 <script src="libs/jquery/jquery-pjax/jquery.pjax.js"></script>
-<script src="html/scripts/ajax.js"></script>
+<script src="assets/scripts/ajax.js"></script>
 <!-- endbuild -->
 </body>
 </html>
