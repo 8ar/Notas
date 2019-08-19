@@ -30,7 +30,7 @@ if( isset($_POST['id_to_delete']) && $_POST['id_to_delete']!="") {
   $conn->query("DELETE FROM `admin_C_DRub`.`devices` WHERE  `devices_id`='".$id_to_delete."'");
 }
 
-if( isset($_POST['serie']) && isset($_POST['mc_num']) && isset($_POST['room']) && isset($_POST['room']) ) {
+if( isset($_POST['serie']) && isset($_POST['mc_num']) && isset($_POST['room']) && isset($_POST['name']) ) {
 
   $mc_num = strip_tags($_POST['mc_num']);
   $serie = strip_tags($_POST['serie']);
@@ -501,5 +501,8 @@ class="p-a col-sm-6 lter">
 <script src="libs/jquery/jquery-pjax/jquery.pjax.js"></script>
 <script src="assets/scripts/ajax.js"></script>
 <!-- endbuild -->
+
+
+
 </body>
 </html>

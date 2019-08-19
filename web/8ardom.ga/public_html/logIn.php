@@ -2,6 +2,7 @@
 
 <?php
 //Prueba sync
+// par
 //$conn = mysqli_connect("localhost:3306","admin_C_DRub ","Eljgv3wB4n","admin_C_DRub");
 session_start();
 $_SESSION['logged']=false;

@@ -3,6 +3,7 @@
 <?php
 //$conn = mysqli_connect("localhost:3306","admin_C_DRub ","Eljgv3wB4n","admin_C_DRub");
 
+//Declaracion de constantes para poder hacer la conexion completa a la base de datos
 
 define("DB_HOST", "localhost");
  define("DB_USER", "admin_C_DRub");
@@ -11,41 +12,75 @@ define("DB_HOST", "localhost");
 
  $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
 //$conn = new PDO('mysql:host=localhost;dbname=admin_C_DRub', DB_USER, DB_PASSWORD);
-//declaracion de variables para poder conectarse
+
 
 $email ="";
 $password="";
 $password_r="";
 $msg="";
 
-if(isset($_POST['email']) && isset($_POST['password']) && isset($_POST['password_r'])){
+if(isset($_POST['email']) && isset($_POST['password']) && isset($_POST['password_r']) && isset($_POST['name'])){
+
 
   $email=strip_tags($_POST['email']);
   $password=strip_tags($_POST['password']);
   $password_r=strip_tags($_POST['password_r']);
+  $username=strip_tags($_POST['name']);
 
 
   if($password==$password_r){
+
+
+
+    //Buscar si ya hay un mail registrado en la base de datos
     $query="SELECT * FROM  users WHERE users_email= '".$email."';";
-
     $result = $conn->query($query);
-
-    
-
     $users = $result->fetch_All(MYSQLI_ASSOC);
-
-    //cuento cuantos elementos tiene mysql_tablename MYSQLI_ASSOC
+    // echo $users;
+    //Contar cuantos elementos tiene mysql_tablename MYSQLI_ASSOC
     $count = count($users);
 
-
+    //Si la no hay ningun email registrado este lo registrara y hara una rutina para agregar los datos en la base de datos
     if ($count==0) {
+      //Encriptar la contraseña para que se guarde en la base de datos
       $password=sha1($password);
-      $query="INSERT INTO users (users_email,users_password) VALUES ('".$email."','".$password."');";
-      echo $query;
-      //$conn->query($query);
+      //Agregar los datos del usuario en la tabla users para poder tomar los datos de ahi
+      $query="INSERT INTO users (users_email,users_password,users_name) VALUES ('".$email."','".$password."','".$username."');";
       $sth = $conn->prepare($query);
-
       $sth->execute();
+      //##Agregar una rutina de verificacion que si agregan los datos conforme se estan ejecutando los querys
+      //Aprender a hacer rutinas
+      //Extraer el id que se le asigno para poder asignarlo en la tabla de los datos
+      //Falta hacer una rutina general para crear el id en la base de datos
+
+      $query="SELECT * FROM  users WHERE users_email= '".$email."' LIMIT 1;";
+      $result = $conn->query($query);
+      $users = $result->fetch_All(MYSQLI_ASSOC);
+
+      foreach ($users as $usersid ) {
+        // code...
+        $userid=$usersid['user_id'];
+      }
+
+
+
+      //Agregar los datos del usuario en las tablas mqtt user y mqtt acl para que tenga acceso a los datos que se va a publicar o se va a subscribir
+      //mqtt user
+      //Agregar una verificacion que el usuario sea
+
+      $query="INSERT INTO mqtt_user (userid,username,password,salt,is_superuser) VALUES ('".$userid."','".$username."','".$password."','sha1',0);";
+      $sth = $conn->prepare($query);
+      $sth->execute();
+      //mqtt acl
+      // Creacion de topico por el usuario
+
+      $usertopic=$userid."/#";
+      $query="INSERT INTO mqtt_acl (allow,username,clientid,access,topic) VALUES (1,'".$username."','".$userid."',3,'".$usertopic."');";
+      echo $query;
+      $sth = $conn->prepare($query);
+      $sth->execute();
+
+
 
       $msg="Usuario creado correctamente ingrese haciendo <a href = login.php>clic aqui</a><br>";
 
@@ -162,24 +197,24 @@ if(isset($_POST['email']) && isset($_POST['password']) && isset($_POST['password
   <script src="libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js"></script>
   <script src="libs/jquery/PACE/pace.min.js"></script>
 
-  <script src="scripts/config.lazyload.js"></script>
+  <script src="assets/scripts/config.lazyload.js"></script>
 
-  <script src="html/scripts/palette.js"></script>
-  <script src="html/scripts/ui-load.js"></script>
-  <script src="html/scripts/ui-jp.js"></script>
-  <script src="html/scripts/ui-include.js"></script>
-  <script src="html/scripts/ui-device.js"></script>
-  <script src="html/scripts/ui-form.js"></script>
-  <script src="html/scripts/ui-nav.js"></script>
-  <script src="html/scripts/ui-screenfull.js"></script>
-  <script src="html/scripts/ui-scroll-to.js"></script>
-  <script src="html/scripts/ui-toggle-class.js"></script>
+  <script src="assets/scripts/palette.js"></script>
+  <script src="assets/scripts/ui-load.js"></script>
+  <script src="assets/scripts/ui-jp.js"></script>
+  <script src="assets/scripts/ui-include.js"></script>
+  <script src="assets/scripts/ui-device.js"></script>
+  <script src="assets/scripts/ui-form.js"></script>
+  <script src="assets/scripts/ui-nav.js"></script>
+  <script src="assets/scripts/ui-screenfull.js"></script>
+  <script src="assets/scripts/ui-scroll-to.js"></script>
+  <script src="assets/scripts/ui-toggle-class.js"></script>
 
-  <script src="html/scripts/app.js"></script>
+  <script src="assets/scripts/app.js"></script>
 
   <!-- ajax -->
   <script src="libs/jquery/jquery-pjax/jquery.pjax.js"></script>
-  <script src="scripts/ajax.js"></script>
+  <script src="assets/scripts/ajax.js"></script>
 <!-- endbuild -->
 </body>
 </html>

@@ -24,7 +24,8 @@ var options = {
   encoding: 'utf8'
 };
 
-var client = mqtt.connect("mqtt://8ardom.ga", options);
+const WebSocket_URL = 'mqtt://8ardom.ga';
+var client = mqtt.connect(WebSocket_URL, options);
 
 //SE REALIZA LA CONEXION
 client.on('connect', function () {
