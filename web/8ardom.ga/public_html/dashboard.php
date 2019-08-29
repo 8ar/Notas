@@ -86,6 +86,15 @@ if(!$logged){
                 </a>
               </li>
 
+              <li>
+                <a href="switch.php" >
+                  <span class="nav-icon">
+                    <i class="fa fa-cogs"></i>
+                  </span>
+                  <span class="nav-text">Switches</span>
+                </a>
+              </li>
+
 
 
             </ul>
@@ -497,13 +506,6 @@ function process_led2(){
   }
 }
 
-
-
-
-
-
-
-
 /*
 ******************************
 ****** CONEXION  *************
@@ -513,28 +515,19 @@ function process_led2(){
 // connect options
 const options = {
       connectTimeout: 4000,
-
       // Authentication
       clientId: 'Prueba2',
       username: 'web_client',
       password: '121212',
-
       keepalive: 60,
       clean: true,
 }
-
 var connected = false;
-
 // WebSocket connect url
 const WebSocket_URL = 'wss://8ardom.ga:8094/mqtt'
-
-
 const client = mqtt.connect(WebSocket_URL, options)
-
-
 client.on('connect', (error) => {
     console.log(error || 'Mqtt conectado por WS! Exito!')
-
     client.subscribe('values', { qos: 0 }, (error) => {
       if (!error) {
         console.log('Suscripción exitosa!')
@@ -562,14 +555,7 @@ client.on('error', (error) => {
     console.log('Error de conexión:', error)
 })
 
-
-
-
-
-
-
 </script>
-
 <!-- endbuild -->
 </body>
 </html>

@@ -125,6 +125,15 @@ $devices = $result->fetch_all(MYSQLI_ASSOC);
                 </a>
               </li>
 
+              <li>
+                <a href="switch.php" >
+                  <span class="nav-icon">
+                    <i class="fa fa-cogs"></i>
+                  </span>
+                  <span class="nav-text">Switches</span>
+                </a>
+              </li>
+
             </ul>
           </nav>
         </div>

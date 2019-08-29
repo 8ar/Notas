@@ -1,12 +1,11 @@
 <?php
 session_start();
+include('mqtt_devices/MySQL/switch_search.php');
 $logged = $_SESSION['logged'];
-
 if(!$logged){
   echo "Ingreso no autorizado";
   die();
 }
-
 ?>
 
 
@@ -83,6 +82,15 @@ if(!$logged){
                     <i class="fa fa-cogs"></i>
                   </span>
                   <span class="nav-text">Dispositivos</span>
+                </a>
+              </li>
+
+              <li>
+                <a href="switch.php" >
+                  <span class="nav-icon">
+                    <i class="fa fa-cogs"></i>
+                  </span>
+                  <span class="nav-text">Switches</span>
                 </a>
               </li>
 
@@ -184,52 +192,30 @@ if(!$logged){
       <div ui-view class="app-body" id="view">
 
 
-        <!-- SECCION CENTRAL -->
-        <div class="padding">
+
+  <!-- SECCION CENTRAL -->
+  <div class="padding">
+
+      <form id="modulosswitch">
+       <!-- Switch del 1 al n -->
+              <div class="row" id="row">
+
+                <?php
+                echo $template
+                 ?>
+
+               </div>
+      </form>
+  <!-- ############ PAGE END-->
+   </div>
+</div>
 
 
-          <!-- SWItCH1 y 2 -->
-          <div class="row">
-
-            <!-- SWItCH1 -->
-            <div class="col-xs-12 col-sm-6">
-              <div class="box p-a">
-                <div class="form-group row">
-                  <label class="col-sm-2 form-control-label">LED1</label>
-                  <div class="col-sm-10">
-                    <label class="ui-switch ui-switch-md info m-t-xs">
-                      <input id="input_led1" onchange="process_led_n()"  type="checkbox" >
-                      <i></i>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- SWItCH2 -->
-              <div class="col-xs-12 col-sm-6">
-                <div class="box p-a">
-                  <div class="form-group row">
-                    <label class="col-sm-2 form-control-label">LED2</label>
-                    <div class="col-sm-10">
-                      <label class="ui-switch ui-switch-md info m-t-xs">
-                        <input id="input_led2" onchange="process_led_n()" type="checkbox"  >
-                        <i></i>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-          </div>
 
 
-        </div>
 
-        <!-- ############ PAGE END-->
 
-      </div>
 
-    </div>
     <!-- / -->
 
     <!-- SELECTOR DE TEMAS -->
@@ -399,7 +385,7 @@ class="p-a col-sm-6 lter">
 <script src="assets/scripts/ajax.js"></script>
 <!-- endbuild -->
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-<script src="mqtt_devices/led.js"></script>
+<script src="mqtt_devices/AJAX/switch.js"></script>
 
 </body>
 </html>
