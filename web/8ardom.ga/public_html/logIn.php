@@ -54,9 +54,12 @@ $count = count($users);
 
 if ($count==1) {
 
-$_SESSION['user_id']=$users[0]['user_id'];
-$_SESSION['users_email']=$users[0]['users_email'];
-
+  $cookie_name = "user_id";
+  $cookie_value = $users[0]['user_id'];
+  setcookie($cookie_name, $cookie_value, time() + (86400 * 0.5), "/"); // 86400 = 1 day
+  $cookie_name = "users_email";
+  $cookie_value = $users[0]['users_email'];
+  setcookie($cookie_name, $cookie_value, time() + (86400 * 0.5), "/"); // 86400 = 1 day
   $msg ="Exito!!";
   $_SESSION['logged']=true;
   echo '<meta http-equiv="refresh" content="2; url=dashboard.php">';

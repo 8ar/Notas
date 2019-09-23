@@ -1,49 +1,57 @@
 //Funciones de ajax para interactuar con las bases de datos por el back end
-function UpdateStatus(element) {
-  var status=0;
-  if($(element).prop("checked")== true){
-  status=1;
-  }
-  const postData = {
-    status: status,
-    id: $(element).attr('id')
-  };
-  let url='https://8ardom.ga/mqtt_devices/MySQL/switch-update-status.php';
-  $.post(url, postData, (response) => {
+function GetData() {
+
+  var data = {
+      // Extraer informaciòn de que aire condicionado es
+          device:$( "#airecondiciondados" ).find(":selected").val(),
+          // Extraer informaciòn de que aire condicionado es
+              mode:$( "#modo_1" ).find(":selected").val(),
+     // Extraer del boton de encendido o apagado
+          switch: $('input[id="switch_1"]').is(':checked'),
+    // Extraer informaciòn de la temperatura
+          temperature: $('input[id="temperatura_1"]').val(),
+   // Extraer informaciòn de la velocidad del aire condicionado
+          velocity:$("#velocidad_1").find(":selected").val()
+    };
+    
+    console.log(data);
+    obtainmessage(data);
+
+
+};
+
+
+function obtainmessage(data) {
+
+  let url='https://8ardom.ga/mqtt_devices/MySQL/obtainaircondiotionermessage.php';
+  $.post(url, data, (response) => {
     console.log(response);
+    SI_AirConditioner(data,response);
+
   });
 };
-//Funciones mqtt
-function SendInstructionSwitch(element){
-  var usertopic=usersinfo[0].topic;
-  var device_id=$(element).attr('device_id');
-  var subtopic="switch/"+device_id;
-  var switch_topic=usertopic.replace("#",subtopic);
-  var num_led=$(element).attr('num_led');
-item = {led:"",status:""};
-item ["led"] = num_led;
 
-  if ($(element).is(":checked")){
-    console.log("Encendido");
-    item ["status"] = 'on';
-  }else{
-    console.log("Apagado");
-    item ["status"] = 'off';
-  }
-  // console.log(item);
-  // jsonObj.push(item);
-  // console.log(jsonObj);
-  var myJSON = JSON.stringify(item);
+//Funciones mqtt
+function SI_AirConditioner(data,message){
+  //Send Instructions Air Conditioner
+  var usertopic=usersinfo[0].topic;
+  var device_id=data.device;
+  var subtopic="airc/"+device_id;
+  var switch_topic=usertopic.replace("#",subtopic);
+// const item = {
+// "N_M":4,
+// "order":[1,2,3,4],
+// "values":[ 0xC3, 0xE2070005, 0x00040000,0x0000A0F5],
+// "bits":[8,32,32,32]
+// };
+  var myJSON = message;
+  console.log(switch_topic);
   console.log(myJSON);
+
   client.publish(switch_topic, myJSON, (error) => {
     console.log(error || 'Mensaje enviado!!!')
   })
-
-
-
 };
-
-
 
 
 /*
@@ -111,12 +119,40 @@ UpdateStatus(element);
 });
 });
 
+
+$("#SubirTemp").click(function() {
+
+var temperatura = parseInt($('input[id="temperatura_1"]').val()) + 1;
+
+if (temperatura>32){
+  temperatura=32;
+}
+
+
+$('input[id="temperatura_1"]').val(temperatura);
+GetData();
+
+});
+
+$("#BajarTemp").click(function() {
+
+var temperatura = parseInt($('input[id="temperatura_1"]').val()) - 1;
+if (temperatura<16){
+  temperatura=16;
+}
+$('input[id="temperatura_1"]').val(temperatura);
+GetData();
+});
+
+
+
 $(document).ready(function() {
 console.log('jquery is working!');
 //Buscar los botones para poderlos imprimir en la pantalla
-$(document).on('change', 'form[id="modulosswitch"]', (e) => {
+$(document).on('change', 'form[id="air_conditioner"]', (e) => {
 e.preventDefault();
-const element = $(this)[0].activeElement;
-SendInstructionSwitch(element);
+console.log("Hubo un cambio");
+GetData();
 });
+
 });

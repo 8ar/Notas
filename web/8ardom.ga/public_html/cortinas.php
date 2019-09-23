@@ -1,6 +1,7 @@
 <?php
 session_start();
 $logged = $_SESSION['logged'];
+include('mqtt_devices/MySQL/search_dev_curtain.php');
 
 if(!$logged){
   echo "Ingreso no autorizado";
@@ -8,9 +9,6 @@ if(!$logged){
 }
 
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,10 +42,12 @@ if(!$logged){
 <body>
   <div class="app" id="app">
 
-    <!-- ############ LAYOUT START-->
+    <!-- ############ LAYcOUT START-->
 
+    <!-- BARRA IZQUIERDA -->
+    <!-- aside -->
 <?php include('ladoizquierdo.php') ?>
-
+    <!-- / -->
 
     <!-- content -->
     <div id="content" class="app-content box-shadow-z0" role="main">
@@ -110,7 +110,7 @@ if(!$logged){
 
 
       <!-- PIE DE PAGINA -->
-      <div class="app-footer">
+      <!-- <div class="app-footer">
         <div class="p-2 text-xs">
           <div class="pull-right text-muted py-1">
             &copy; Copyright <strong>Flatkit</strong> <span class="hidden-xs-down">- Built with Love v1.1.3</span>
@@ -120,94 +120,98 @@ if(!$logged){
             <a class="nav-link" href="">About</a>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div ui-view class="app-body" id="view">
 
 
         <!-- SECCION CENTRAL -->
         <div class="padding">
+          <!-- Aqui se escoge el aire condicionado(s) para poder hacer el cambio en la casa o habitaciones deseadas -->
+          <form id="air_conditioner">
+            <div class="row">
 
-          <!-- VALORES EN TIEMPO REAL -->
-          <div class="row">
+              <div class="col-xs-13 col-sm-4">
+                  <div class="box p-a">
+                    <div class="clear">
+                      <select id="cortinas_1" class="form-control select2" ui-jp="select2" ui-options="{theme: 'bootstrap'}">
+                        <?php foreach ($models as $model ) { ?>
+                          <option value="<?php echo $model['devices_id']?>"><?php echo $model['devices_name'] ?></option>
+                        <?php } ?>
 
-            <div class="col-xs-12 col-sm-4">
-              <div class="box p-a">
-                <div class="pull-left m-r">
-                  <span class="w-48 rounded  accent">
-                    <i class="fa fa-sun-o"></i>
-                  </span>
-                </div>
-                <div class="clear">
-                  <h4 class="m-0 text-lg _300"><b id="display_temp1">-- </b><span class="text-sm"> C</span></h4>
-                  <small class="text-muted">Promedio: 17 C</small>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xs-6 col-sm-4">
-              <div class="box p-a">
-                <div class="pull-left m-r">
-                  <span class="w-48 rounded primary">
-                    <i class="fa fa-desktop"></i>
-                  </span>
-                </div>
-                <div class="clear">
-                  <h4 class="m-0 text-lg _300"><b id="display_temp2">-- </b><span class="text-sm"> C</span></h4>
-                  <small class="text-muted">Temp Pico: 70 C</small>
-                </div>
-              </div>
-            </div>
-            <div class="col-xs-6 col-sm-4">
-              <div class="box p-a">
-                <div class="pull-left m-r">
-                  <span class="w-48 rounded warn">
-                    <i class="fa fa-plug"></i>
-                  </span>
-                </div>
-                <div class="clear">
-                  <h4 class="m-0 text-lg _300"><b id="display_volt">-- </b><span class="text-sm"> V</span></h4>
-                  <small class="text-muted">Tensión Pico: 5.8 V</small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- SWItCH1 y 2 -->
-          <div class="row">
-            <!-- SWItCH1 -->
-            <div class="col-xs-12 col-sm-6">
-              <div class="box p-a">
-                <div class="form-group row">
-                  <label class="col-sm-2 form-control-label">LED1</label>
-                  <div class="col-sm-10">
-                    <label class="ui-switch ui-switch-md info m-t-xs">
-                      <input id="input_led1" onchange="process_led1()"  type="checkbox" >
-                      <i></i>
-                    </label>
+                      </select>
+                      <small class="text-muted">Cortinas</small>
+                    </div>
                   </div>
-                </div>
               </div>
+
             </div>
 
-            <!-- SWItCH2 -->
+            <div class="row">
+              <!-- SWItCH1 -->
               <div class="col-xs-12 col-sm-6">
                 <div class="box p-a">
                   <div class="form-group row">
-                    <label class="col-sm-2 form-control-label">LED2</label>
+                    <label class="col-sm-2 form-control-label">Subir/Bajar</label>
                     <div class="col-sm-10">
                       <label class="ui-switch ui-switch-md info m-t-xs">
-                        <input id="input_led2" onchange="process_led2()" type="checkbox"  >
+                        <input id="subirbajar"  type="checkbox" >
                         <i></i>
                       </label>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+
+
+
+            <div class="row">
+              <!-- SWItCH1 -->
+              <div class="col-xs-12 col-sm-6">
+                <div class="box p-a">
+                  <div class="form-group row">
+                    <label class="col-sm-2 form-control-label">Detener</label>
+                    <div class="col-sm-10">
+                      <label class="ui-switch ui-switch-md info m-t-xs">
+                        <input id="detener_cortina"  type="checkbox" >
+                        <i></i>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- VALORES EN TIEMPO REAL -->
+
+          <div class="row">
+
+            <div class="col-xs-13 col-sm-4">
+                <div class="box p-a">
+                  <div class="clear">
+                    <select id="canal_cort" name="mc_num" class="form-control select2" ui-jp="select2" ui-options="{theme: 'bootstrap'}">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">TODAS</option>
+                    </select>
+                    <small class="text-muted">Canal</small>
+                  </div>
+                </div>
+            </div>
+
           </div>
 
 
-        </div>
+          </form>
+
+
+
+
+
 
         <!-- ############ PAGE END-->
 
@@ -378,12 +382,14 @@ class="p-a col-sm-6 lter">
 
 <script src="assets/scripts/app.js"></script>
 
+
 <!-- ajax -->
 <script src="libs/jquery/jquery-pjax/jquery.pjax.js"></script>
 <script src="assets/scripts/ajax.js"></script>
 
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-<script type="text/javascript">
+<script src="mqtt_devices/AJAX/curtains.js"></script>
+<!-- <script type="text/javascript">
 
 /*
 ******************************
@@ -489,7 +495,7 @@ client.on('error', (error) => {
     console.log('Error de conexión:', error)
 })
 
-</script>
+</script> -->
 <!-- endbuild -->
 </body>
 </html>

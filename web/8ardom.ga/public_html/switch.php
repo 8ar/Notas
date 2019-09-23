@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('mqtt_devices/MySQL/switch_search.php');
+
 $logged = $_SESSION['logged'];
 if(!$logged){
   echo "Ingreso no autorizado";
@@ -46,74 +46,7 @@ if(!$logged){
     <!-- ############ LAYOUT START-->
 
     <!-- BARRA IZQUIERDA -->
-    <!-- aside -->
-    <div id="aside" class="app-aside modal nav-dropdown">
-      <!-- fluid app aside -->
-      <div class="left navside dark dk" data-layout="column">
-        <div class="navbar no-radius">
-          <!-- brand -->
-          <a class="navbar-brand">
-            <div ui-include="'assets/images/logo.svg'"></div>
-            <img src="assets/images/logo.png" alt="." class="hide">
-            <span class="hidden-folded inline">IoT</span>
-          </a>
-          <!-- / brand -->
-        </div>
-        <div class="hide-scroll" data-flex>
-          <nav class="scroll nav-light">
-
-            <ul class="nav" ui-nav>
-              <li class="nav-header hidden-folded">
-                <small class="text-muted">Main</small>
-              </li>
-
-              <li>
-                <a href="dashboard.php" >
-                  <span class="nav-icon">
-                    <i class="fa fa-building-o"></i>
-                  </span>
-                  <span class="nav-text">Principal</span>
-                </a>
-              </li>
-
-              <li>
-                <a href="devices.php" >
-                  <span class="nav-icon">
-                    <i class="fa fa-cogs"></i>
-                  </span>
-                  <span class="nav-text">Dispositivos</span>
-                </a>
-              </li>
-
-              <li>
-                <a href="switch.php" >
-                  <span class="nav-icon">
-                    <i class="fa fa-cogs"></i>
-                  </span>
-                  <span class="nav-text">Switches</span>
-                </a>
-              </li>
-
-
-
-            </ul>
-          </nav>
-        </div>
-        <div class="b-t">
-          <div class="nav-fold">
-            <a href="profile.html">
-              <span class="pull-left">
-                <img src="assets/images/a0.jpg" alt="..." class="w-40 img-circle">
-              </span>
-              <span class="clear hidden-folded p-x">
-                <span class="block _500">Jean Reyes</span>
-                <small class="block text-muted"><i class="fa fa-circle text-success m-r-sm"></i>online</small>
-              </span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+<?php include('ladoizquierdo.php') ?>
     <!-- / -->
 
     <!-- content -->
@@ -177,7 +110,7 @@ if(!$logged){
 
 
       <!-- PIE DE PAGINA -->
-      <div class="app-footer">
+      <!-- <div class="app-footer">
         <div class="p-2 text-xs">
           <div class="pull-right text-muted py-1">
             &copy; Copyright <strong>Flatkit</strong> <span class="hidden-xs-down">- Built with Love v1.1.3</span>
@@ -187,7 +120,7 @@ if(!$logged){
             <a class="nav-link" href="">About</a>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div ui-view class="app-body" id="view">
 
@@ -196,11 +129,33 @@ if(!$logged){
   <!-- SECCION CENTRAL -->
   <div class="padding">
 
+<?php include('mqtt_devices/MySQL/switch_search.php'); ?>
+
       <form id="modulosswitch">
+        <form id="air_conditioner">
+          <div class="row">
+            <div class="col-xs-13 col-sm-4">
+                <div class="box p-a">
+                  <div class="clear">
+                    <select id="garage_1" class="form-control select2" ui-jp="select2" ui-options="{theme: 'bootstrap'}">
+                      <?php foreach ($models as $model ) { ?>
+                        <option value="<?php echo $model['devices_id']?>"><?php echo $model['devices_name'] ?></option>
+                      <?php } ?>
+
+                    </select>
+                    <small class="text-muted">Dispositivo</small>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+
+
        <!-- Switch del 1 al n -->
               <div class="row" id="row">
 
                 <?php
+
                 echo $template
                  ?>
 

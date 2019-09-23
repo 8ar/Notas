@@ -1,6 +1,8 @@
 <?php
-session_start();
- $user_id=$_SESSION['user_id'];
+$user_id=$_COOKIE['user_id'];
+
+// session_start();
+ // $user_id=$_SESSION['user_id'];
 define("DB_HOST", "localhost");
  define("DB_USER", "admin_C_DRub");
  define("DB_PASSWORD", "zqZLcM3LiZ");

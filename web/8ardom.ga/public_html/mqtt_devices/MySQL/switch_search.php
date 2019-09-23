@@ -1,6 +1,17 @@
 <?php
 include('database.php');
-  $query = "SELECT * FROM switch WHERE switch_user_id = '$user_id'";
+$device_id='';
+$query = "SELECT * FROM devices WHERE devices_user_id = '$user_id' AND devices_id LIKE '00002%';";
+  //   WHERE devices_user_id = '$user_id' AND devices_id LIKE '00001%'";
+  $result = mysqli_query($conn, $query);
+  $models = $result->fetch_all(MYSQLI_ASSOC);
+  if(!$result) {
+    die('Query Error' . mysqli_error($conn));
+  }
+
+  $device_id=$models[0]['devices_id'];
+
+  $query = "SELECT * FROM switch WHERE switch_user_id = '$user_id' AND switch_device_id = '$device_id';";
   $result = mysqli_query($conn, $query);
 
   if(!$result) {
@@ -37,6 +48,10 @@ $i=1;
           ';
           $i=$i+1;
   }
+
+
+
+
 
 mysqli_close($conn);
 ?>
