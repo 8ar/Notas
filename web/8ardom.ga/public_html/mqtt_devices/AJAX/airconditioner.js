@@ -5,15 +5,19 @@ function GetData() {
       // Extraer informaciòn de que aire condicionado es
           device:$( "#airecondiciondados" ).find(":selected").val(),
           // Extraer informaciòn de que aire condicionado es
-              mode:$( "#modo_1" ).find(":selected").val(),
+          mode:$( "#modo_1" ).find(":selected").val(),
      // Extraer del boton de encendido o apagado
           switch: $('input[id="switch_1"]').is(':checked'),
     // Extraer informaciòn de la temperatura
           temperature: $('input[id="temperatura_1"]').val(),
    // Extraer informaciòn de la velocidad del aire condicionado
-          velocity:$("#velocidad_1").find(":selected").val()
+          spd:$("#velocidad_1").find(":selected").val(),
+// Extraer estado del switch del swing up o down
+          sUp: $('input[id="switch_swingup_1"]').is(':checked'),
+
+          sDown: $('input[id="switch_swingdown_1"]').is(':checked')
     };
-    
+
     console.log(data);
     obtainmessage(data);
 
@@ -120,29 +124,6 @@ UpdateStatus(element);
 });
 
 
-$("#SubirTemp").click(function() {
-
-var temperatura = parseInt($('input[id="temperatura_1"]').val()) + 1;
-
-if (temperatura>32){
-  temperatura=32;
-}
-
-
-$('input[id="temperatura_1"]').val(temperatura);
-GetData();
-
-});
-
-$("#BajarTemp").click(function() {
-
-var temperatura = parseInt($('input[id="temperatura_1"]').val()) - 1;
-if (temperatura<16){
-  temperatura=16;
-}
-$('input[id="temperatura_1"]').val(temperatura);
-GetData();
-});
 
 
 
@@ -154,5 +135,72 @@ e.preventDefault();
 console.log("Hubo un cambio");
 GetData();
 });
+
+
+$('button[id="SubirTemp"]').on("tap",function() // bind on method with tap event to li
+         {
+           var temperatura = parseInt($('input[id="temperatura_1"]').val()) + 1;
+           if (temperatura>32){
+             temperatura=32;
+           }
+           $('input[id="temperatura_1"]').val(temperatura);
+           GetData();
+      });
+
+
+      $('button[id="SubirTemp"]').on("touchstart", function(e) {
+          e.preventDefault();
+
+
+          var temperatura = parseInt($('input[id="temperatura_1"]').val()) + 1;
+          if (temperatura>32){
+            temperatura=32;
+          }
+          $('input[id="temperatura_1"]').val(temperatura);
+          GetData();
+      });
+
+
+      $('button[id="BajarTemp"]').on("touchstart", function(e) {
+          e.preventDefault();
+
+          var temperatura = parseInt($('input[id="temperatura_1"]').val()) - 1;
+          if (temperatura<16){
+            temperatura=16;
+          }
+          $('input[id="temperatura_1"]').val(temperatura);
+          GetData();
+      });
+
+
+
+
+$('button[id="SubirTemp"]').click(function() {
+var temperatura = parseInt($('input[id="temperatura_1"]').val()) + 1;
+if (temperatura>32){
+  temperatura=32;
+}
+$('input[id="temperatura_1"]').val(temperatura);
+GetData();
+});
+
+$('button[id="BajarTemp"]').click(function() {
+
+var temperatura = parseInt($('input[id="temperatura_1"]').val()) - 1;
+if (temperatura<16){
+  temperatura=16;
+}
+$('input[id="temperatura_1"]').val(temperatura);
+GetData();
+});
+
+
+
+
+
+
+
+
+
 
 });

@@ -1,11 +1,16 @@
 <?php
-$temp = "16";
-$temp = "20";
-$mode = "cool";
+$temp = "26";
+$mode = "heat";
+$sUp = false;
+$sDown = false;
+$spd = "AUTO";
 
-if (isset($_POST["temperature"]) && isset($_POST["mode"])) {
+if (isset($_POST["temperature"]) && isset($_POST["mode"]) && isset($_POST["sUp"]) && isset($_POST["sDown"]) && isset($_POST["spd"])) {
   $temp = $_POST["temperature"];
   $mode=$_POST["mode"];
+  $sUp=$_POST["sUp"];
+  $sDown=$_POST["sDown"];
+  $spd=$_POST["spd"];
 }
 
 $b1 ="11000011";
@@ -22,67 +27,95 @@ $b11="00000000";
 $b12="00000000";
 $b13="01001011";
 
-
-
-function Temperatura($tempe) {
- //    echo "$tempe<br>";
- //    echo "El numero en decimal que busco es: " .($tempe - 8) ;
- //    echo "<br>";
-    $binario = decbin($tempe - 8);
- //    echo ' y en binario es: '.$binario;
-	// echo "<br>";
+////////////////////////////////////////////////////////////////////
+function Temperatura($tempe, $sUp) {
+  $binario = decbin($tempe - 8);
   $bit="";
+  $init_by2="";
+  $init_by2 = swingUp_by2($sUp);
+
 	for ($i = 1; $i <= (strlen($binario)); $i++) {
 	  $bit .= substr($binario, (-$i),1);
 	}
 
-	$bit2 = "111$bit";
+	$bit2 = "$init_by2"."$bit";
 
-	 if ((strlen($bit2) == 7)){
-	 	$bit2 = "111$bit" ."0";
-	 }
-	return $bit2 ;
+  if ((strlen($bit2) == 7)){
+	 $bit2 = "$init_by2"."$bit" ."0";
+  }
+  return $bit2 ;
 }
-
+////////////////////////////////////////////////////////////////////
+function swingUp_by2($sUp){
+  $init_by2 = " ";
+  if ($sUp == false) {
+    $init_by2 = "111";
+  }
+  else {
+    $init_by2 = "000";
+  }
+  return $init_by2;
+}
+////////////////////////////////////////////////////////////////////
+function swingDown_by3($sDown){
+  $init_by3 = " ";
+  $b3 = "";
+  if ($sDown == false) {
+    $b3 = "00000111";
+  }
+  else {
+    $b3 = "00000000";
+  }
+  return $b3;
+}
+////////////////////////////////////////////////////////////////////
+function speed($spd){
+  $by5s = "";
+  if ($spd == "AUTO") {
+    $by5s = "00000101";
+  }
+  elseif ($spd == "1") {
+    $by5s = "00000110";
+  }
+  elseif ($spd == "2") {
+    $by5s = "00000010";
+  }
+  else {
+    $by5s = "00000100";
+  }
+  return $by5s;
+}
+////////////////////////////////////////////////////////////////////
 function mode_by7($mode){
 	if ($mode == "cool") {
 		$by7i = "00000100";
-		//echo $by7i;
-		//echo "<br>";
 		return $by7i;
 	} else {
 		$by7i = "00000001";
-		//echo $by7i;
-		//echo "<br>";
 		return $by7i;
 	}
 }
-
+////////////////////////////////////////////////////////////////////
 function mode_by10($mode){
 	if ($mode == "cool") {
 		$by10i = "00000100";
-		//echo $by10i;
-		//echo "<br>";
 		return $by10i;
 		}
-
 	 else {
 		$by10i = "00001100";
-		//echo $by10i;
-		//echo "<br>";
 		return $by10i;
 		}
 
 }
-
+////////////////////////////////////////////////////////////////////
 function checkSum($by2, $by3, $by5, $by7, $by10,$by12){
 
-$by2i="";
-$by3i="";
-$by5i="";
-$by7i="";
-$by10i="";
-$by12i="";
+  $by2i="";
+  $by3i="";
+  $by5i="";
+  $by7i="";
+  $by10i="";
+  $by12i="";
 
 
 	for ($i = 1; $i <= (strlen($by2)); $i++) {
@@ -116,20 +149,8 @@ $by12i="";
 	$decby10i = bindec($by10i);
 	$decby12i = bindec($by12i);
 	$checkSum1 = $decby2i + $decby3i + $decby5i + $decby7i + $decby10i + $decby12i;
-	// echo "$decby2i";
-	// echo "<br>";
-	// echo "$decby3i";
-	// echo "<br>";
-	// echo "$decby5i";
-	// echo "<br>";
-	// echo "$decby7i";
-	// echo "<br>";
-	// echo "$decby10i";
-	// echo "<br>";
-	// echo "$decby12i";
-	// echo "<br>";
-	// echo "$checkSum1";
-	// echo "<br>";
+  // echo $checkSum1;
+  // echo "<br>";
 
 	if ( $checkSum1 <= 318){
 		$checkSum2 = $checkSum1 - 61;
@@ -140,11 +161,9 @@ $by12i="";
 	else{
 		$checkSum2 = $checkSum1 - 573;
 	}
-	// echo "$checkSum2";
-	// echo "<br>";
+
 	$byte13 = decbin($checkSum2);
-	// echo "$byte13";
-	// echo "<br>";
+
   $bit13="";
 	for ($i = 1; $i <= (strlen($byte13)); $i++) {
 	  $bit13 .= substr($byte13, (-$i),1);
@@ -157,21 +176,23 @@ $by12i="";
 	if ((strlen($bit13) == 6)){
 	 	$bit13 = "$bit13" ."00";
 	}
+  if ((strlen($bit13) == 7)){
+	 	$bit13 = "$bit13" ."0";
+	}
 
 	return "$bit13";
 }
-
-$b2 = Temperatura($temp);
+////////////////////////////////////////////////////////////////////
+$b2 = Temperatura($temp,$sUp);
+$b3 = swingDown_by3($sDown);
+$b5 = speed($spd);
 $b7 = mode_by7($mode);
 $b10 = mode_by10($mode);
-//echo "$b2";
-//$b12 = "10000000" ;
-//echo "<br>";
 $b13 = checkSum($b2, $b3, $b5, $b7, $b10, $b12);
-//echo "$b13";
-
+////////////////////////////////////////////////////////////////////
 $comando = "$b1" ."$b2" ."$b3" ."$b4" ."$b5" ."$b6"."$b7" ."$b8" ."$b9" ."$b10" ."$b11" ."$b12" ."$b13";
-
+// echo "$comando";
+// echo "<br>";
 //// Codigo Carlos          ////
 $messagearray=array('N_M' =>0 ,'order' => array(),'values'=> array(),'bits' => array());
 //$bin="11000011111000100000011100000000000001010000000000000100000000000000000000000100000000001010000011110011";
@@ -213,7 +234,16 @@ if ($modBytemessage>0) {
 }
 $messagearray["N_M"]=$n;
 
+
 // print_r($messagearray);
+// echo $spd;
+// echo $temp ;
+// echo $mode;
+// echo $sUp;
+// echo $sDown;
+// echo $spd;
+
+
 // echo $mode;
 // echo $temp;
 echo json_encode($messagearray);

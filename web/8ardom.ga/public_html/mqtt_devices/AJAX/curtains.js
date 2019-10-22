@@ -1,47 +1,71 @@
 //Funciones de ajax para interactuar con las bases de datos por el back end
 function GetData() {
-
-  var data = {
-      // Extraer informaciòn de que aire condicionado es
-          device:$( "#cortinas_1" ).find(":selected").val(),
-     // Extraer del boton de encendido o apagado
-          switch: $('input[id="subirbajar"]').is(':checked'),
-     //Se encarga de poder parar las cortinas si es necesario
-          stop: $('input[id="detener_cortina"]').is(':checked'),
-    // Extraer informaciòn de la temperatura
-   // Extraer informaciòn de la velocidad del aire condicionado
-          channel:$("#canal_cort").find(":selected").val()
-    };
+    var data = {
+        // Extraer informaciòn de que aire condicionado es
+            device:$( "#cortinas_1" ).find(":selected").val(),
+       // Extraer del boton de subir o bajar
+            up: $('input[id="subir"]').is(':checked'),
+      //Bajar
+            down: $('input[id="bajar"]').is(':checked'),
+       //Se encarga de poder parar las cortinas si es necesario
+            stop: $('input[id="detener_cortina"]').is(':checked'),
+       //Toma el canal que se quiere cambiar
+            channel:$("#canal_cort").find(":selected").val()
+      };
     console.log(data);
     obtainmessage(data);
-
-
 };
+
+function change_switches(element){
+     // Extraer del boton de subir o bajar
+      const    up= $('input[id="subir"]')[0];
+    //Bajar
+      const    down= $('input[id="bajar"]')[0];
+     //Se encarga de poder parar las cortinas si es necesario
+      const    stop= $('input[id="parar"]')[0];
+
+    if ((stop == element)){
+
+      $('input[id="subir"]').prop('checked', false);
+      $('input[id="parar"]').prop('checked', true);
+      $('input[id="bajar"]').prop('checked', false);
+
+    }else if ((up==element)){
+
+
+      $('input[id="subir"]').prop('checked', true);
+      $('input[id="parar"]').prop('checked', false);
+      $('input[id="bajar"]').prop('checked', false);
+
+    }else if ((down==element) ) {
+      $('input[id="subir"]').prop('checked', false);
+      $('input[id="parar"]').prop('checked', false);
+      $('input[id="bajar"]').prop('checked', true);
+    }
+
+}
 
 
 function obtainmessage(data) {
 
-  let url='https://8ardom.ga/mqtt_devices/MySQL/obtainaircondiotionermessage.php';
+  let url='https://8ardom.ga/mqtt_devices/MySQL/message_curtains_rf.php';
   $.post(url, data, (response) => {
     console.log(response);
-    SI_AirConditioner(data,response);
+    SI_rfcurtain(data,response);
 
   });
 };
 
 //Funciones mqtt
-function SI_AirConditioner(data,message){
+function SI_rfcurtain(data,message){
   //Send Instructions Air Conditioner
   var usertopic=usersinfo[0].topic;
   var device_id=data.device;
-  var subtopic="airc/"+device_id;
+  var subtopic="curtain_rf/"+device_id;
   var switch_topic=usertopic.replace("#",subtopic);
-// const item = {
-// "N_M":4,
-// "order":[1,2,3,4],
-// "values":[ 0xC3, 0xE2070005, 0x00040000,0x0000A0F5],
-// "bits":[8,32,32,32]
-// };
+
+
+
   var myJSON = message;
   console.log(switch_topic);
   console.log(myJSON);
@@ -109,21 +133,11 @@ $(document).ready(function() {
   // location.assign("https://8ardom.ga/switch.php");
 console.log('jquery is working!');
 //Buscar los botones para poderlos imprimir en la pantalla
-$(document).on('change', 'form[id="modulosswitch"]', (e) => {
+$(document).on('change', 'form[id="curtain_rf"]', (e) => {
 e.preventDefault();
 const element = $(this)[0].activeElement;
-UpdateStatus(element);
-
-});
-});
-
-$(document).ready(function() {
-console.log('jquery is working!');
-//Buscar los botones para poderlos imprimir en la pantalla
-$(document).on('change', 'form[id="air_conditioner"]', (e) => {
-e.preventDefault();
-console.log("Hubo un cambio");
+change_switches(element);
 GetData();
-});
 
+});
 });

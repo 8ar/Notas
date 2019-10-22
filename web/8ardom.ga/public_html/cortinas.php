@@ -128,7 +128,7 @@ if(!$logged){
         <!-- SECCION CENTRAL -->
         <div class="padding">
           <!-- Aqui se escoge el aire condicionado(s) para poder hacer el cambio en la casa o habitaciones deseadas -->
-          <form id="air_conditioner">
+          <form id="curtain_rf">
             <div class="row">
 
               <div class="col-xs-13 col-sm-4">
@@ -148,14 +148,30 @@ if(!$logged){
             </div>
 
             <div class="row">
-              <!-- SWItCH1 -->
               <div class="col-xs-12 col-sm-6">
                 <div class="box p-a">
                   <div class="form-group row">
-                    <label class="col-sm-2 form-control-label">Subir/Bajar</label>
+                    <label class="col-sm-2 form-control-label">Subir</label>
                     <div class="col-sm-10">
                       <label class="ui-switch ui-switch-md info m-t-xs">
-                        <input id="subirbajar"  type="checkbox" >
+                        <input id="subir"  type="checkbox" >
+                        <i></i>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+
+              <div class="col-xs-12 col-sm-6">
+                <div class="box p-a">
+                  <div class="form-group row">
+                    <label class="col-sm-2 form-control-label">Bajar</label>
+                    <div class="col-sm-10">
+                      <label class="ui-switch ui-switch-md info m-t-xs">
+                        <input id="bajar"  type="checkbox" >
                         <i></i>
                       </label>
                     </div>
@@ -171,10 +187,10 @@ if(!$logged){
               <div class="col-xs-12 col-sm-6">
                 <div class="box p-a">
                   <div class="form-group row">
-                    <label class="col-sm-2 form-control-label">Detener</label>
+                    <label class="col-sm-2 form-control-label">Alto</label>
                     <div class="col-sm-10">
                       <label class="ui-switch ui-switch-md info m-t-xs">
-                        <input id="detener_cortina"  type="checkbox" >
+                        <input id="parar"  type="checkbox" >
                         <i></i>
                       </label>
                     </div>
@@ -198,7 +214,7 @@ if(!$logged){
                       <option value="4">4</option>
                       <option value="5">TODAS</option>
                     </select>
-                    <small class="text-muted">Canal</small>
+                    <small class="text-muted">Cortina</small>
                   </div>
                 </div>
             </div>
@@ -207,12 +223,6 @@ if(!$logged){
 
 
           </form>
-
-
-
-
-
-
         <!-- ############ PAGE END-->
 
       </div>

@@ -148,10 +148,30 @@ if(!$logged){
                   </div>
               </div>
 
+              <div class="col-xs-12 col-sm-6">
+                <div class="box p-a">
+                  <div class="form-group row">
+                    <label class="col-sm-2 form-control-label">Enviar</label>
+                    <div class="col-sm-10">
+                      <label class="ui-switch ui-switch-md info m-t-xs">
+                        <input id="switch_repeticion"  type="checkbox" >
+                        <i></i>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
             </div>
+          </div>
+
+
+
+
+            <!-- VALORES EN TIEMPO REAL -->
+
 
             <div class="row">
-              <!-- SWItCH1 -->
+
               <div class="col-xs-12 col-sm-6">
                 <div class="box p-a">
                   <div class="form-group row">
@@ -165,18 +185,13 @@ if(!$logged){
                   </div>
                 </div>
               </div>
-            </div>
 
 
-            <!-- VALORES EN TIEMPO REAL -->
-
-
-            <div class="row">
               <div class="col-xs-13 col-sm-4">
                 <div class="box p-a">
                   <div class="clear">
                     <div class="pull-left m-r">
-                      <input type="number" id="temperatura_1" class="m-0 num-lg _300" name="quantity" min=16 max=32 value=16>
+                      <input type="number" id="temperatura_1" class="m-0 num-lg _300" name="quantity" min=16 max=32 value=16></input>
                       <small class="text-muted">Temperatura</small>
                       <button id="SubirTemp" type="button" name="button"> + </button>
                       <button id="BajarTemp" type="button" name="button"> - </button>
@@ -185,44 +200,85 @@ if(!$logged){
                   </div>
                 </div>
               </div>
+
+
+
+
           </div>
+
+        <!-- <div class="row">
+
+        </div> -->
 
 
           <div class="row">
 
-            <div class="col-xs-13 col-sm-4">
-                <div class="box p-a">
-                  <div class="clear">
-                    <select id="velocidad_1" name="mc_num" class="form-control select2" ui-jp="select2" ui-options="{theme: 'bootstrap'}">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">AUTO</option>
-                    </select>
-                    <small class="text-muted">Velocidad</small>
-                  </div>
-                </div>
-            </div>
 
-          </div>
-
-          <div class="row">
 
             <div class="col-xs-13 col-sm-4">
                 <div class="box p-a">
                   <div class="clear">
                     <select id="modo_1" name="mc_num" class="form-control select2" ui-jp="select2" ui-options="{theme: 'bootstrap'}">
-
                       <option value="cool">FRIO</option>
                       <option value="heat">CALOR</option>
-
                     </select>
                     <small class="text-muted">Modo</small>
                   </div>
                 </div>
             </div>
 
+            <div class="col-xs-12 col-sm-6">
+              <div class="box p-a">
+                <div class="form-group row">
+                  <label class="col-sm-2 form-control-label">Swing Up</label>
+                  <div class="col-sm-10">
+                    <label class="ui-switch ui-switch-md info m-t-xs">
+                      <input id="switch_swingup_1"  type="checkbox" >
+                      <i></i>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
           </div>
+
+
+          <div class="row">
+          <div class="col-xs-13 col-sm-4">
+              <div class="box p-a">
+                <div class="clear">
+                  <select id="velocidad_1" name="mc_num" class="form-control select2" ui-jp="select2" ui-options="{theme: 'bootstrap'}">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="AUTO">AUTO</option>
+                  </select>
+                  <small class="text-muted">Velocidad</small>
+                </div>
+              </div>
+          </div>
+
+
+          <div class="col-xs-12 col-sm-6">
+            <div class="box p-a">
+              <div class="form-group row">
+                <label class="col-sm-2 form-control-label">Swing Side</label>
+                <div class="col-sm-10">
+                  <label class="ui-switch ui-switch-md info m-t-xs">
+                    <input id="switch_swingdown_1"  type="checkbox" >
+                    <i></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+
+
           </form>
 
 
@@ -405,114 +461,8 @@ class="p-a col-sm-6 lter">
 <script src="assets/scripts/ajax.js"></script>
 
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
 <script src="mqtt_devices/AJAX/airconditioner.js"></script>
-<!-- <script type="text/javascript">
 
-/*
-******************************
-****** PROCESOS  *************
-******************************
-*/
-
-
-function update_values(temp1, temp2, volts){
-  $("#display_temp1").html(temp1);
-  $("#display_temp2").html(temp2);
-  $("#display_volt").html(volts);
-}
-
-function process_msg(topic, message){
-  // ej: "10,11,12"
-  if (topic == "values"){
-    var msg = message.toString();
-    var sp = msg.split(",");
-    var temp1 = sp[0];
-    var temp2 = sp[1];
-    var volts = sp[2];
-    update_values(temp1,temp2,volts);
-  }
-}
-
-function process_led1(){
-  if ($('#input_led1').is(":checked")){
-    console.log("Encendido");
-
-    client.publish('led1', 'on', (error) => {
-      console.log(error || 'Mensaje enviado!!!')
-    })
-  }else{
-    console.log("Apagado");
-    client.publish('led1', 'off', (error) => {
-      console.log(error || 'Mensaje enviado!!!')
-    })
-  }
-}
-
-function process_led2(){
-  if ($('#input_led2').is(":checked")){
-    console.log("Encendido");
-
-    client.publish('led2', 'on', (error) => {
-      console.log(error || 'Mensaje enviado!!!')
-    })
-  }else{
-    console.log("Apagado");
-    client.publish('led2', 'off', (error) => {
-      console.log(error || 'Mensaje enviado!!!')
-    })
-  }
-}
-
-/*
-******************************
-****** CONEXION  *************
-******************************
-*/
-
-// connect options
-const options = {
-      connectTimeout: 4000,
-      // Authentication
-      clientId: 'Prueba2',
-      username: 'web_client',
-      password: '121212',
-      keepalive: 60,
-      clean: true,
-}
-var connected = false;
-// WebSocket connect url
-const WebSocket_URL = 'wss://8ardom.ga:8094/mqtt'
-const client = mqtt.connect(WebSocket_URL, options)
-client.on('connect', (error) => {
-    console.log(error || 'Mqtt conectado por WS! Exito!')
-    client.subscribe('values', { qos: 0 }, (error) => {
-      if (!error) {
-        console.log('Suscripción exitosa!')
-      }else{
-        console.log('Suscripción fallida!')
-      }
-    })
-
-    // publish(topic, payload, options/callback)
-    client.publish('fabrica', 'esto es un verdadero éxito', (error) => {
-      console.log(error || 'Mensaje enviado!!!')
-    })
-})
-
-client.on('message', (topic, message) => {
-  console.log('Mensaje recibido bajo tópico: ', topic, ' -> ', message.toString())
-  process_msg(topic, message);
-})
-
-client.on('reconnect', (error) => {
-    console.log('Error al reconectar', error)
-})
-
-client.on('error', (error) => {
-    console.log('Error de conexión:', error)
-})
-
-</script> -->
-<!-- endbuild -->
 </body>
 </html>
