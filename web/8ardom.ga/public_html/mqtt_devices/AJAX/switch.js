@@ -17,7 +17,7 @@ function UpdateStatus(element) {
 function SendInstructionSwitch(element){
   var usertopic=usersinfo[0].topic;
   var device_id=$(element).attr('device_id');
-  var subtopic="switch/"+device_id;
+  var subtopic=""+device_id;
   var switch_topic=usertopic.replace("#",subtopic);
   var num_led=$(element).attr('num_led');
 item = {led:"",status:""};

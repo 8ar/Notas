@@ -194,7 +194,7 @@ $comando = "$b1" ."$b2" ."$b3" ."$b4" ."$b5" ."$b6"."$b7" ."$b8" ."$b9" ."$b10" 
 // echo "$comando";
 // echo "<br>";
 //// Codigo Carlos          ////
-$messagearray=array('N_M' =>0 ,'order' => array(),'values'=> array(),'bits' => array());
+$messagearray=array('N_M' =>0 ,'order' => array(),'values'=> array(),'bits' => array(),'type'=>1);
 //$bin="11000011111000100000011100000000000001010000000000000100000000000000000000000100000000001010000011110011";
 $bin=$comando;
 $length=strlen($bin);
@@ -233,17 +233,7 @@ if ($modBytemessage>0) {
   // echo "___".substr($bin, -$modBytemessage)."____";
 }
 $messagearray["N_M"]=$n;
-
-
-// print_r($messagearray);
-// echo $spd;
-// echo $temp ;
-// echo $mode;
-// echo $sUp;
-// echo $sDown;
-// echo $spd;
-
-
+print_r($messagearray);
 // echo $mode;
 // echo $temp;
 echo json_encode($messagearray);

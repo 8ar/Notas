@@ -1,6 +1,6 @@
 <?php
 include('database.php');
-$query = "SELECT * FROM devices WHERE devices_user_id = '$user_id' AND devices_id LIKE '00003%';";
+$query = "SELECT * FROM devices WHERE devices_user_id = '$user_id' AND (devices_id LIKE '00003%' OR devices_id LIKE '00007%');";
   //   WHERE devices_user_id = '$user_id' AND devices_id LIKE '00001%'";
   $result = mysqli_query($conn, $query);
   $models = $result->fetch_all(MYSQLI_ASSOC);

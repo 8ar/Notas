@@ -8,7 +8,7 @@ function GetData() {
       //Bajar
             down: $('input[id="bajar"]').is(':checked'),
        //Se encarga de poder parar las cortinas si es necesario
-            stop: $('input[id="detener_cortina"]').is(':checked'),
+            stop: $('input[id="parar"]').is(':checked'),
        //Toma el canal que se quiere cambiar
             channel:$("#canal_cort").find(":selected").val()
       };
@@ -52,7 +52,6 @@ function obtainmessage(data) {
   $.post(url, data, (response) => {
     console.log(response);
     SI_rfcurtain(data,response);
-
   });
 };
 
@@ -61,7 +60,7 @@ function SI_rfcurtain(data,message){
   //Send Instructions Air Conditioner
   var usertopic=usersinfo[0].topic;
   var device_id=data.device;
-  var subtopic="curtain_rf/"+device_id;
+  var subtopic=""+device_id;
   var switch_topic=usertopic.replace("#",subtopic);
 
 
@@ -69,10 +68,12 @@ function SI_rfcurtain(data,message){
   var myJSON = message;
   console.log(switch_topic);
   console.log(myJSON);
-
-  client.publish(switch_topic, myJSON, (error) => {
+  // for (var i = 0; i < 4; i++) {+i.toString()
+    client.publish(switch_topic, myJSON, (error) => {
     console.log(error || 'Mensaje enviado!!!')
-  })
+    })
+  // }
+
 };
 
 

@@ -40,7 +40,7 @@ function SI_AirConditioner(data,message){
   //Send Instructions Air Conditioner
   var usertopic=usersinfo[0].topic;
   var device_id=data.device;
-  var subtopic="airc/"+device_id;
+  var subtopic=""+device_id;
   var switch_topic=usertopic.replace("#",subtopic);
 // const item = {
 // "N_M":4,
