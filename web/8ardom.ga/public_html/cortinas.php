@@ -208,11 +208,12 @@ if(!$logged){
                 <div class="box p-a">
                   <div class="clear">
                     <select id="canal_cort" name="mc_num" class="form-control select2" ui-jp="select2" ui-options="{theme: 'bootstrap'}">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">TODAS</option>
+                      <option value="one">1</option>
+                      <option value="two">2</option>
+                      <option value="three">3</option>
+                      <option value="four">4</option>
+                      <option value="five">5</option>
+                      <option value="all">TODAS</option>
                     </select>
                     <small class="text-muted">Cortina</small>
                   </div>
@@ -397,8 +398,9 @@ class="p-a col-sm-6 lter">
 <script src="libs/jquery/jquery-pjax/jquery.pjax.js"></script>
 <script src="assets/scripts/ajax.js"></script>
 
-<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-<script src="mqtt_devices/AJAX/curtains.js"></script>
+<script type="text/javascript" src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<script type="text/javascript" src="mqtt_devices/AJAX/curtains.js"></script>
+
 <!-- <script type="text/javascript">
 
 /*

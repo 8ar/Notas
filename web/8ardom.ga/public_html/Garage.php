@@ -341,6 +341,11 @@ class="p-a col-sm-6 lter">
 
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 <script src="mqtt_devices/AJAX/garage.js"></script>
+
+
+
+
+
 <!-- <script type="text/javascript">
 
 /*

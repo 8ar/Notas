@@ -233,7 +233,7 @@ if ($modBytemessage>0) {
   // echo "___".substr($bin, -$modBytemessage)."____";
 }
 $messagearray["N_M"]=$n;
-print_r($messagearray);
+// print_r($messagearray);
 // echo $mode;
 // echo $temp;
 echo json_encode($messagearray);

@@ -1,5 +1,8 @@
 <!-- BARRA IZQUIERDA -->
 <!-- aside -->
+<div id="cambio">
+
+</div>
 <div id="aside" class="app-aside modal nav-dropdown">
   <!-- fluid app aside -->
   <div class="left navside dark dk" data-layout="column">
@@ -39,7 +42,7 @@
           </li>
 
           <li>
-            <a href="/air_conditioner.php" >
+            <a onclick="navigatecortinas('https://8ardom.ga/air_conditioner.php')">
               <span class="nav-icon">
                 <i class="fa fa-building-o"></i>
               </span>
@@ -48,7 +51,7 @@
           </li>
 
           <li>
-            <a href="switch.php" >
+            <a onclick="navigatecortinas('https://8ardom.ga/switch.php')">
               <span class="nav-icon">
                 <i class="fa fa-cogs"></i>
               </span>
@@ -57,7 +60,8 @@
           </li>
 
           <li>
-            <a href="/cortinas.php" >
+            <!-- <a id = "cortinas" onclick="" href="/cortinas.php" > -->
+            <a id = "cortinas" onclick="navigatecortinas('https://8ardom.ga/cortinas.php')">
               <span class="nav-icon">
                 <i class="fa fa-building-o"></i>
               </span>
@@ -66,7 +70,7 @@
           </li>
 
           <li>
-            <a href="Garage.php" >
+            <a onclick="navigatecortinas('https://8ardom.ga/Garage.php')">
               <span class="nav-icon">
                 <i class="fa fa-cogs"></i>
               </span>
@@ -93,4 +97,12 @@
     </div>
   </div>
 </div>
+<script>
+function navigatecortinas(page){
+  console.log(page);
+  document.getElementById("cambio").innerHTML = '<meta http-equiv="refresh" content="0; url='+page+'">';
+  window.location.href = page;
+}
+
+</script>
 <!-- / -->

@@ -7,6 +7,7 @@ if(!$logged){
   die();
 }
 
+
 ?>
 
 
@@ -383,6 +384,7 @@ class="p-a col-sm-6 lter">
 <script src="assets/scripts/ajax.js"></script>
 
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
 <script type="text/javascript">
 
 /*
@@ -488,6 +490,15 @@ client.on('reconnect', (error) => {
 client.on('error', (error) => {
     console.log('Error de conexión:', error)
 })
+
+$( window ).load(function() {
+
+    if (window.location.href.indexOf('reload')==-1) {
+      console.log('Volviendo a cargar')
+         window.location.replace(window.location.href+'?reload');
+    }
+});
+
 
 </script>
 <!-- endbuild -->

@@ -462,6 +462,13 @@ class="p-a col-sm-6 lter">
 
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 
+<script type="text/javascript">
+  const page="air_conditioner.php";
+  $(document).ready(function(){
+      $('#maincontent').load('index.html?p='+page);
+      return false;
+  });
+</script>
 <script src="mqtt_devices/AJAX/airconditioner.js"></script>
 
 </body>

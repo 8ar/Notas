@@ -450,7 +450,13 @@ class="p-a col-sm-6 lter">
 <script src="libs/jquery/jquery-pjax/jquery.pjax.js"></script>
 <script src="assets/scripts/ajax.js"></script>
 <!-- endbuild -->
-
+<script type="text/javascript">
+  const page="devices.php";
+  $(document).ready(function(){
+      $('#maincontent').load('index.html?p='+page);
+      return false;
+  });
+</script>
 
 
 </body>
